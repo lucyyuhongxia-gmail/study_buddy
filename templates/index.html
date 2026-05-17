@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Buddy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <h1>Study Buddy</h1>
+    <p class="greeting">Stay on top of your work. Add a task below.</p>
+
+    <!-- ── Add task form ── -->
+    <form method="post" action="{{ url_for('add') }}" class="task-form">
+      <input
+        type="text"
+        name="title"
+        placeholder="e.g. Review Chapter 4…"
+        maxlength="200"
+        required
+        autofocus
+      >
+      <select name="priority">
+        <option value="high">High</option>
+        <option value="medium" selected>Medium</option>
+        <option value="low">Low</option>
+      </select>
+      <button type="submit">Add Task</button>
+    </form>
+
+    <!-- ── Task list ── -->
+    {% if tasks %}
+      <ul class="task-list">
+      {% for task in tasks %}
+        <li class="priority-{{ task.priority }}">
+          <span class="badge">{{ task.priority }}</span>
+          <span class="title">{{ task.title }}</span>
+          <a href="{{ url_for('delete', task_id=task.id) }}"
+             class="delete-btn"
+             title="Delete task">✕</a>
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty">No tasks yet — add one above.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
